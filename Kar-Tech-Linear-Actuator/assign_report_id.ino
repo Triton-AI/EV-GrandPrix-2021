@@ -1,6 +1,7 @@
 // demo: CAN-BUS Shield, send data
 // loovee@seeed.cc
-
+// Dallas Dominguez - EvGrandPrix - 2021 - V1.0
+// This script allows you to assign a Report ID to a CAN actuator
 
 #include <SPI.h>
 
