@@ -13,9 +13,16 @@
  *    read input from ros cube and control steering and thorttle
  */
 
+#include <SPI.h>
+#include "mcp2515_can.h" // CAN shield
+
 #include "Motor.h"
 #include "SteeringWheel.h"
 #include "BrakeActuator.h"
+
+// Set SPI CS Pin according to your hardware
+// For Arduino MCP2515 Hat:
+const int SPI_CS_PIN = 9;
 
 const int safetyPin = 6; 
 const int altraxThrottlePin = 5;
@@ -23,17 +30,21 @@ const int pedalPin = 4;
 const int steerMinSwitch = 7;
 const int steerMaxSwitch = 8;
 
+mcp2515_can CAN(SPI_CS_PIN); 
 Motor motor(altraxThrottlePin);
 SteeringWheel wheel(steerMinSwitch, steerMaxSwitch);
-BrakeActuator brake;
-
-int throttle_pwm = 0;
-int steering_theta = -60;
-int actuator_position = 0;
-int gradient = 0;
+BrakeActuator brake(0x00FF0302, CAN);
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
+  while(!Serial){};
+
+  // Set CAN baudrate to 250k
+  while (CAN_OK != CAN.begin(CAN_250KBPS)) {
+        Serial.println("CAN init fail, retry...");
+        delay(100);
+  }
+  Serial.println("CAN init ok!");
 
   /* Physical Pedal */
   pinMode(pedalPin, INPUT);
@@ -43,7 +54,7 @@ void setup() {
   /* Throttle Motor */
   motor.init();
   /* Steering Wheel */
-  wheel.init();
+//  wheel.init();
   /* Brake Actuator*/
   brake.init();
 
@@ -56,44 +67,13 @@ void loop() {
 
 void calibrationTest() {
   Serial.println("Running Go Kart Calibration Test.");
-
   /* sweep motor rpms */
-  Serial.println("Testing Throttle Motor...");
-  gradient = 1;
-  throttle_pwm = (throttle_pwm + gradient) % (motor.MAX_THROTTLE + 1);
-  while(throttle_pwm != motor.MIN_THROTTLE) { 
-    if(throttle_pwm == motor.MAX_THROTTLE) gradient = -1;
-    motor.setThrottle(throttle_pwm);
-    Serial.println(throttle_pwm);
-    delay(25);
-    throttle_pwm = (throttle_pwm + gradient) % (motor.MAX_THROTTLE + 1);
-  }
-  
+  motor.test();
   delay(250);
-
   /* sweep steering angles */
-  Serial.println("Testing Steering Falcon 500 Motor...");
-  gradient = 1;
-  steering_theta = (steering_theta + gradient) % (wheel.MAX_STEER + 1);
-  while(steering_theta != wheel.MIN_STEER) {
-    if(steering_theta == wheel.MAX_STEER) gradient = -1;
-    wheel.setSteer(steering_theta);
-    Serial.println(steering_theta);
-    delay(25);
-    steering_theta = (steering_theta + gradient) % (wheel.MAX_STEER + 1);
-  }
-
-  delay(250);
-
+  //wheel.test();
+  //delay(250);
   /* sweep brake accuator */
-  Serial.println("Testing KarTech Brake Actuator...");
-  gradient = 1;
-  actuator_position = (actuator_position + gradient) % (brake.MAX_POSITION + 1);
-  while(actuator_position != brake.MIN_POSITION) {
-    if(actuator_position == brake.MAX_POSITION) gradient = -1;
-    brake.setPosition(actuator_position);
-    Serial.println(actuator_position);
-    delay(25);
-    actuator_position = (actuator_position + gradient) % (brake.MAX_POSITION + 1);
-  }
+  brake.test();
+  delay(250);
 }
