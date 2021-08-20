@@ -14,7 +14,7 @@ private:
   unsigned char CAN_DATA_LENGTH = 8;
 
 public:
-  const int MAX_POSITION = 3450;
+  const int MAX_POSITION = 3550;
   const int MIN_POSITION = 550;
   const mcp2515_can CAN;
   const int32_t CAN_ID;
@@ -32,22 +32,22 @@ void BrakeActuator::setPosition(int pos) {
   // Note every unit is 0.001"
   CAN_DATA[2] = pos & 0xFF;
   CAN_DATA[3] = (CAN_DATA[3] & 0xC0) | ((pos >> 8) & 0x1F);
-  CAN.sendMsgBuf(CAN_ID, CAN_EXTID, CAN_DATA_LENGTH, CAN_DATA); 
+  CAN.sendMsgBuf(CAN_ID, CAN_EXTID, CAN_DATA_LENGTH, CAN_DATA);   
   return;
 }
 
 void BrakeActuator::test() {
   Serial.println("Testing KarTech Brake Actuator...");
   int gradient = 50;
-  int actuator_position = (MIN_POSITION + gradient) % (MAX_POSITION + 1);
+  int actuator_position = MIN_POSITION + gradient;
   while(actuator_position != MIN_POSITION) {
-    if(actuator_position == MAX_POSITION) gradient = -50;
+    if(actuator_position >= MAX_POSITION) gradient = -1 * gradient;
     setPosition(actuator_position); 
     Serial.println(actuator_position);
     delay(100);
     actuator_position += gradient;
   }
-  setPosition(actuator_position); 
+  setPosition(MAX_POSITION);
 }
 
 
@@ -78,7 +78,7 @@ The 16 bit counter allows the user to have a slower trigger frequency that would
 as 10Hz instead of the arduino clock frequency of 16MHz.
 
 void init() {
-      // hardware interup every 100ms = 10Hz
+      // hardware interupt every 100ms = 10Hz
     cli();//stop interrupts
     //set timer1 interrupt at 10Hz
     TCCR1A = 0; // set entire TCCR1A register to 0

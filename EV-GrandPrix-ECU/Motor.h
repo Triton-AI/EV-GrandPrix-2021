@@ -23,7 +23,7 @@ public:
 };
 
 void Motor::setThrottle(int pwm) {
-    pwm = filter.read(pwm);
+    // pwm = filter.read(pwm);
     // map pwm to motor
     analogWrite(throttlePin, pwm);
 }
@@ -31,9 +31,9 @@ void Motor::setThrottle(int pwm) {
 void Motor::test() {
   Serial.println("Testing Throttle Motor...");
   int gradient = 1;
-  int throttle_pwm = MIN_THROTTLE + gradient;
+  int throttle_pwm = MIN_THROTTLE + gradient;  
   while(throttle_pwm != MIN_THROTTLE) { 
-    if(throttle_pwm == MAX_THROTTLE) gradient = -1;
+    if(throttle_pwm >= MAX_THROTTLE) gradient = -1 * gradient;
     setThrottle(throttle_pwm);
     Serial.println(throttle_pwm);
     delay(25);

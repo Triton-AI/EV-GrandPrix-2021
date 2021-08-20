@@ -1,5 +1,4 @@
 /*******************************************************************************
-                                                    Jose Jorge Jimenez-Olivas
 
 File Name:       Filter.h
 Description:     Data smoothing mechanism for data given by analogRead.
