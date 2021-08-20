@@ -12,7 +12,7 @@
  * Sources of Help: https://github.com/jimenezjose/EV-GrandPrix/wiki
  */
 #include <SPI.h>
-#include "mcp2515_can.h" // CAN shield
+#include "mcp2515_can.h" // CAN shield Library https://github.com/Seeed-Studio/Seeed_Arduino_CAN
 
 #include "Motor.h"
 #include "SteeringWheel.h"
@@ -26,12 +26,16 @@ const int safetyPin = 6;
 const int altraxThrottlePin = 5; // OK
 const int pedalPin = 4;
 const int pedalSwitch = 3;
-const int steerMinSwitch = 7;
-const int steerMaxSwitch = 8;
+const int steerMinSwitch = 10;
+const int steerMaxSwitch = 7;
+const int potentiometerPin = A0;
 
 mcp2515_can CAN(SPI_CS_PIN); 
+Adafruit_PWMServoDriver falconPWM = Adafruit_PWMServoDriver();
+
+
 Motor motor(altraxThrottlePin);
-SteeringWheel wheel(steerMinSwitch, steerMaxSwitch);
+SteeringWheel wheel(steerMinSwitch, steerMaxSwitch, potentiometerPin, falconPWM);
 BrakeActuator brake(0x00FF0302, CAN);
 
 void setup() {
@@ -69,13 +73,13 @@ void loop() {
 void calibrationTest() {
   Serial.println("Running Go Kart Calibration Test.");
   /* sweep motor rpms */
-  motor.test();
+  //motor.test();
   delay(250);
   /* sweep steering angles */
   wheel.test();
   delay(250);
   /* sweep brake accuator */
-  brake.test();
+  //brake.test();
   delay(250);
   Serial.println("Done.");
 }
