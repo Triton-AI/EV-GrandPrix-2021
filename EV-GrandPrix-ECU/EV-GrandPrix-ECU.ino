@@ -26,7 +26,7 @@ const int safetyPin = 6;
 const int altraxThrottlePin = 5; // OK
 const int pedalPin = 4;
 const int pedalSwitch = 3;
-const int steerMinSwitch = 10;
+const int steerMinSwitch = 8;
 const int steerMaxSwitch = 7;
 const int potentiometerPin = A0;
 
@@ -56,7 +56,7 @@ void setup() {
   pinMode(safetyPin, OUTPUT);
   analogWrite(safetyPin, 127); // enable pedal emulator (DAC) with 1000Hz square wave
   /* Throttle Motor */
-  motor.init();
+  //motor.init();
   /* Steering Wheel */
   wheel.init();
   /* Brake Actuator*/
@@ -79,7 +79,7 @@ void calibrationTest() {
   wheel.test();
   delay(250);
   /* sweep brake accuator */
-  //brake.test();
+  brake.test();
   delay(250);
   Serial.println("Done.");
 }
