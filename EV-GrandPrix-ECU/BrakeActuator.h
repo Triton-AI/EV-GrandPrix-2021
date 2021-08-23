@@ -14,7 +14,7 @@ private:
   unsigned char CAN_DATA_LENGTH = 8;
 
 public:
-  const int MAX_POSITION = 3000;
+  const int MAX_POSITION = 3500;
   const int MIN_POSITION = 550;
   const mcp2515_can CAN;
   const int32_t CAN_ID;
@@ -38,17 +38,16 @@ void BrakeActuator::setPosition(int pos) {
 
 void BrakeActuator::test() {
   Serial.println("Testing KarTech Brake Actuator...");
-//  int gradient = 50;
-//  int actuator_position = MIN_POSITION + gradient;
-//  while(actuator_position != MIN_POSITION) {
-//    if(actuator_position >= MAX_POSITION) gradient = -1 * gradient;
-//    setPosition(actuator_position); 
-//   Serial.println(actuator_position);
-//    delay(100);
-//    actuator_position += gradient;
-//  }
-  setPosition(MAX_POSITION);
-  //Serial.println(actuator_position);
+  int gradient = 50;
+  int actuator_position = MIN_POSITION + gradient;
+  while(actuator_position != MIN_POSITION) {
+    if(actuator_position >= MAX_POSITION) gradient = -1 * gradient;
+    setPosition(actuator_position); 
+   Serial.println(actuator_position);
+    delay(100);
+    actuator_position += gradient;
+  }
+//  setPosition(MAX_POSITION);
 }
 
 

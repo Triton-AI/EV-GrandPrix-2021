@@ -39,7 +39,7 @@ public:
 
     void init(){
       falconPWM.begin();
-                  falconPWM.setPWMFreq(rightFreq);
+      falconPWM.setPWMFreq(rightFreq);
 
       }
     // Turns the wheel completely to one side, then turn it completely in the other direction
@@ -84,8 +84,8 @@ public:
       Serial.println(currentAngle);
       
       //move left or right depending on the current angle
-      if(currentAngle-deciredAngle<0) falconPWM.setPWMFreq(rightFreq);
-      else falconPWM.setPWMFreq(leftFreq);
+      if(currentAngle-deciredAngle<0) falconPWM.setPWMFreq(327);
+      else falconPWM.setPWMFreq(333);
     
       //keep on going torwards that angle when you are outside of 5 degrees
       while(deciredAngle+5<currentAngle || currentAngle<deciredAngle-5){
@@ -94,6 +94,8 @@ public:
           Serial.print("current angle ");
           Serial.println(currentAngle);
     
+          limitLeft = digitalRead(minSwitch);
+          limitRight = digitalRead(maxSwitch);
           //Ensures we don't overshoot with limit switches
           if (limitLeft == HIGH) {
             falconPWM.setPWMFreq(rightFreq);

@@ -33,7 +33,6 @@ const int potentiometerPin = A0;
 mcp2515_can CAN(SPI_CS_PIN); 
 Adafruit_PWMServoDriver falconPWM = Adafruit_PWMServoDriver();
 
-
 Motor motor(altraxThrottlePin);
 SteeringWheel wheel(steerMinSwitch, steerMaxSwitch, potentiometerPin, falconPWM);
 BrakeActuator brake(0x00FF0302, CAN);
@@ -56,7 +55,7 @@ void setup() {
   pinMode(safetyPin, OUTPUT);
   analogWrite(safetyPin, 127); // enable pedal emulator (DAC) with 1000Hz square wave
   /* Throttle Motor */
-  //motor.init();
+  motor.init();
   /* Steering Wheel */
   wheel.init();
   /* Brake Actuator*/
@@ -66,14 +65,14 @@ void setup() {
 }
 
 void loop() {
-  // controllerTest();
+   controllerTest();
 }
 
 // demonstrate control of throttle, steering wheel, and brake.
 void calibrationTest() {
   Serial.println("Running Go Kart Calibration Test.");
   /* sweep motor rpms */
-  //motor.test();
+  motor.test();
   delay(250);
   /* sweep steering angles */
   wheel.test();
@@ -96,22 +95,26 @@ void controllerTest() {
 }
 
 // Control Steering
-int steer_angle = wheel.MIN_ANGLE;
-int steer_gradient = 12;
+int steer_angle = 0;
+int steer_gradient = (wheel.MAX_ANGLE - wheel.MIN_ANGLE) / 10;
 void left() {
   if(steer_angle <= wheel.MIN_ANGLE) steer_angle = wheel.MIN_ANGLE;
   else steer_angle -= steer_gradient;
+  Serial.print("setting angle to: ");
+  Serial.println(steer_angle);
   wheel.setSteer(steer_angle);
 }
 void right() {
   if(steer_angle >= wheel.MAX_ANGLE) steer_angle = wheel.MAX_ANGLE;
   else steer_angle += steer_gradient;
+  Serial.print("setting angle to: ");
+  Serial.println(steer_angle);
   wheel.setSteer(steer_angle);
 }
 
 // Control Throttle
 int throttle = motor.MIN_THROTTLE;
-int throttle_gradient = 25;
+int throttle_gradient = (motor.MAX_THROTTLE - motor.MIN_THROTTLE) / 10;
 void up() {
   if(throttle >= motor.MAX_THROTTLE) throttle = motor.MAX_THROTTLE;
   else throttle += throttle_gradient;
@@ -127,11 +130,11 @@ void down() {
 void square() {
   brake.setPosition(brake.MAX_POSITION);
 }
-void circle() {
+void x() {
   brake.setPosition(brake.MIN_POSITION);
 }
 
+void circle() {}
 void triangle() {}
-void x() {}
 void select() {}
 void start() {}
