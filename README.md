@@ -1,2 +1,2 @@
 # EV-GrandPrix
-Innovation for the Autonomous EV Grand Prix.
+Innovation for an autonomous go kart competition.
