@@ -1,5 +1,7 @@
-# EV-GrandPrix
-Innovation for an autonomous go kart competition.
+# EV-GrandPrix-2021
+Innovation for an autonomous go kart competition. 
+
+For the sake to accelerate more universities to join the EV Grand Prix, we decided to open source our first functional prototype.
 
 > Documentation: [wiki](https://github.com/jimenezjose/EV-GrandPrix/wiki)
 
