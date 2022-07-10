@@ -10,7 +10,7 @@ To accelerate more universities to join the EV Grand Prix, we decided open sourc
 ![Alt text](https://github.com/jimenezjose/EV-GrandPrix-2021/blob/main/images/ev-grand-prix-2021-podium.JPG)
 ![Alt text](https://github.com/jimenezjose/EV-GrandPrix-2021/blob/main/images/ev-grand-prix-2021-podium-3.png)
 
-## Video Demonstration from Lary's Garage @Indiana: 
+## Video Demonstration from Larry's Garage @Indiana: 
 [![Alt Text](https://github.com/jimenezjose/EV-GrandPrix/blob/main/images/Prototype_Youtube_Thumbnail.png)](https://www.youtube.com/embed/vV8BebNH10I)
 
 ## Wire Diagram
